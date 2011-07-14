@@ -45,7 +45,6 @@ class Client
 		if(!is_object($this->_client) || !$this->_client instanceof \Zend\Http\Client)
 		{
 			$this->_client = new \Zend\Http\Client();
-			
 		}
 		
 		return $this->_client;
@@ -68,7 +67,7 @@ class Client
 			throw new \Exception('Shop not set!');
 		}
 		
-		return 'http://'. $this->_config['api_key'] .':'. md5($this->_config['secret'] . $this->_config['token']) .'@'. $this->_config['shop'];
+		return 'https://'. $this->_config['api_key'] .':'. md5($this->_config['secret'] . $this->_config['token']) .'@'. $this->_config['shop'];
 	}
 	
 	public function setConfig($config = array())

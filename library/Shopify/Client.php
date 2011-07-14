@@ -2,10 +2,7 @@
 
 namespace Shopify;
 
-use Zend\Config\Config,
-	Zend\Http\Client;
-
-class ShopifyClient
+class Client
 {
 	const USER_AGENT = 'PHP Shopify API v0.0.1';
 	
@@ -45,9 +42,9 @@ class ShopifyClient
 	
 	private function _getClient()
 	{
-		if(!is_object($this->_client) || !$this->_client instanceof Client)
+		if(!is_object($this->_client) || !$this->_client instanceof \Zend\Http\Client)
 		{
-			$this->_client = new Client();
+			$this->_client = new \Zend\Http\Client();
 			
 		}
 		
@@ -76,7 +73,7 @@ class ShopifyClient
 	
 	public function setConfig($config = array())
 	{
-        if ($config instanceof Config) {
+        if ($config instanceof \Zend\Config\Config) {
             $config = $config->toArray();
 
         } elseif(!is_array($config)) {

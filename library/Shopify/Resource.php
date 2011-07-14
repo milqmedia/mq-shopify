@@ -48,5 +48,27 @@ abstract class Resource
     	return $this->_config['url'];
     }
     
+    protected function _flattenOptions($options = null)
+    {
+    	if(!is_array($options))
+    	{
+    		throw new \InvalidArgumentException('Array expected, got '. gettype($options));
+    	}
+    	
+		$_options = array();
+		
+		foreach($options as $option => $value)
+		{
+			if(is_array($value))
+			{
+				$value = implode(',', $value);
+			}
+			
+			$_options[] = $option .'='. $value;
+		}
+		
+		return implode('&', $_options);
+    }
+    
     abstract public function get($options = null);
 }

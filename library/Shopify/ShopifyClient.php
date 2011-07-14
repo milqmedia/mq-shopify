@@ -7,6 +7,8 @@ use Zend\Config\Config,
 
 class ShopifyClient
 {
+	const USER_AGENT = 'PHP Shopify API v0.0.1';
+	
 	private $_client = null;
 	
 	private $_config = array(
@@ -38,7 +40,7 @@ class ShopifyClient
 		
 		$this->_getClient()->setUri($this->_getUrl() . $request);
 		
-		return $this->_getClient()->request();
+		return json_decode($this->_getClient()->request()->getBody());
 	}
 	
 	private function _getClient()
@@ -46,16 +48,34 @@ class ShopifyClient
 		if(!is_object($this->_client) || !$this->_client instanceof Client)
 		{
 			$this->_client = new Client();
+			
 		}
+		
+		return $this->_client;
 	}
 	
 	private function _getUrl()
 	{
-		return 'https://'. $this->_config['api_key'] .':'. $this->_config['secret'] .'@'. $this->_config['shop'] .'/admin/';
+		if(!isset($this->_config['api_key']) || $this->_config['api_key'] == '')
+		{
+			throw new \Exception('Api key not set!');
+		}
+		
+		if(!isset($this->_config['secret']) || $this->_config['secret'] == '')
+		{
+			throw new \Exception('Secret not set!');
+		}
+		
+		if(!isset($this->_config['shop']) || $this->_config['shop'] == '')
+		{
+			throw new \Exception('Shop not set!');
+		}
+		
+		return 'http://'. $this->_config['api_key'] .':'. md5($this->_config['secret'] . $this->_config['token']) .'@'. $this->_config['shop'];
 	}
 	
 	public function setConfig($config = array())
-    {
+	{
         if ($config instanceof Config) {
             $config = $config->toArray();
 
@@ -64,7 +84,7 @@ class ShopifyClient
         }
 
         foreach($config as $k => $v) {
-            $this->config[strtolower($k)] = $v;
+            $this->_config[strtolower($k)] = $v;
         }
 
         return $this;

@@ -37,7 +37,7 @@ class Client
 		
 		$this->_getClient()->setUri($this->_getUrl() . $request);
 		
-		return json_decode($this->_getClient()->request()->getBody());
+		return json_decode($this->_getClient()->getResponse()->getBody());
 	}
 	
 	private function _getClient()

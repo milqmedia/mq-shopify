@@ -40,7 +40,7 @@ class Client
 		$req->setUri($this->_getUrl() . $request);
 		$this->_getClient()->setAuth($urlParts['user'], $urlParts['pass']);
 		
-		$response = $client->dispatch($req);
+		$response = $this->_getClient()->dispatch($req);
 		if ($response->isSuccess()) {
 			//  the POST was successful
 			return json_decode($response->getBody());

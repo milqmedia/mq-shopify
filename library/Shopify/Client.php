@@ -11,8 +11,7 @@ class Client
 	private $_config = array(
 		'api_key' => '',
 		'secret'  => '',
-		'shop'    => '',
-		'token'   => ''
+		'shop'    => ''
 	);
 	
 	private $_url = '';
@@ -67,7 +66,7 @@ class Client
 			throw new \Exception('Shop not set!');
 		}
 		
-		return 'https://'. $this->_config['api_key'] .':'. md5($this->_config['secret'] . $this->_config['token']) .'@'. $this->_config['shop'];
+		return 'https://'. $this->_config['api_key'] .':'. $this->_config['secret'] .'@'. $this->_config['shop'];
 	}
 	
 	public function setConfig($config = array())

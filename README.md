@@ -21,8 +21,7 @@ Basic Example
         $client = new \Shopify\Client(array(
                 'shop'    => $_GET['shop'],
                 'api_key' => API_KEY,
-                'secret'  => SECRET,
-                'token'   => $_GET['t']
+                'secret'  => SECRET
         ));
 
         $ShopifyProduct = new \Shopify\Resource\Product(array(

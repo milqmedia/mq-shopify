@@ -4,84 +4,136 @@ namespace Shopify;
 
 class Client
 {
-	const USER_AGENT = 'PHP Shopify API v0.0.1';
-	
-	private $_client = null;
-	
-	private $_config = array(
-		'api_key' => '',
-		'secret'  => '',
-		'shop'    => ''
-	);
-	
-	private $_url = '';
-	
-	public function __construct($config = null)
-	{
-		if ($config !== null) {
-			$this->setConfig($config);
-		}
-	}
-	
-	public function request($request = null)
-	{
-		if(is_null($request))
-		{
-			throw new \InvalidArgumentException('You must specify a request url.');
-		}
-		elseif(!is_string($request))
-		{
-			throw new \InvalidArgumentException('String expected, got ' . gettype($request));
-		}
-		
-		$urlParts = parse_url($this->_getUrl());
-		
-		$req = new \Zend\Http\Request();
-		$req->setUri($this->_getUrl() . $request);
-		$this->_getClient()->setAuth($urlParts['user'], $urlParts['pass']);
-		
-		$response = $this->_getClient()->dispatch($req);
-		if ($response->isSuccess()) {
-			//  the POST was successful
-			return json_decode($response->getBody());
-		}
-	}
-	
-	private function _getClient()
-	{
-		if(!is_object($this->_client) || !$this->_client instanceof \Zend\Http\Client)
-		{
-			$adapter = new \Zend\Http\Client\Adapter\Curl();
-			
-			$this->_client = new \Zend\Http\Client();
-			$this->_client->setAdapter($adapter);
-		}
-		
-		return $this->_client;
-	}
-	
-	private function _getUrl()
-	{
-		if(!isset($this->_config['api_key']) || $this->_config['api_key'] == '')
-		{
-			throw new \Exception('Api key not set!');
-		}
-		
-		if(!isset($this->_config['secret']) || $this->_config['secret'] == '')
-		{
-			throw new \Exception('Secret not set!');
-		}
-		
-		if(!isset($this->_config['shop']) || $this->_config['shop'] == '')
-		{
-			throw new \Exception('Shop not set!');
-		}
-		
-		return 'https://'. $this->_config['api_key'] .':'. $this->_config['secret'] .'@'. $this->_config['shop'];
-	}
-	
-	public function setConfig($config = array())
-	{
+    /**
+     * USER_AGENT
+     * @var string
+     */
+    const USER_AGENT = 'PHP Shopify API v0.0.1';
+    
+    /**
+     * The HTTP Client
+     * @var \Zend\Http\Client
+     */
+    private $_client = null;
+    
+    /**
+     * Configuration array
+     * @var array
+     */
+    private $_config = array(
+        'api_key' => '',
+        'secret'  => '',
+        'shop'    => ''
+    );
+    
+    /**
+     * FQDN URL for the shop
+     * @var string
+     */
+    private $_url = '';
+    
+    /**
+     * Constructor
+     * @param array|NULL $config
+     */
+    public function __construct($config = null)
+    {
+        if ($config !== null) {
+            $this->setConfig($config);
+        }
+    }
+    
+    /**
+     * Send a Request
+     * @param string $request
+     * @throws \InvalidArgumentException
+     * @todo Handle when the $response is not successful
+     * @return string
+     */
+    public function request($request = null)
+    {
+    	// Sanity checking
+        if(is_null($request))
+        {
+            throw new \InvalidArgumentException('You must specify a request url.');
+        }
+        elseif(!is_string($request))
+        {
+            throw new \InvalidArgumentException('String expected, got ' . gettype($request));
+        }
+        
+        // Spit the domain name into an array so we can extract the user and pass
+        $urlParts = parse_url($this->_getUrl());
+        
+        // Send the request 
+        $req = new \Zend\Http\Request();
+        $req->setUri($this->_getUrl() . $request);
+        $this->_getClient()->setAuth($urlParts['user'], $urlParts['pass']);
+        
+        // Get the response
+        $response = $this->_getClient()->dispatch($req);
+        
+        // If the response was successful
+        if ($response->isSuccess()) {
+            return json_decode($response->getBody());
+        }
+    }
+    
+    /**
+     * Get Client
+     * If not set, the cUrl adapter is used to prevent issues with 
+     * connecting to https
+     * 
+     * @return \Zend\Http\Client
+     */
+    private function _getClient()
+    {
+        if(!is_object($this->_client) || !$this->_client instanceof \Zend\Http\Client)
+        {
+        	// Set the adapter to cUrl
+            $adapter = new \Zend\Http\Client\Adapter\Curl();
+            
+            $this->_client = new \Zend\Http\Client();
+            $this->_client->setAdapter($adapter);
+        }
+        
+        return $this->_client;
+    }
+    
+    /**
+     * Builds the URL so the API can connect
+     * @throws \Exception
+     * @return string
+     */
+    private function _getUrl()
+    {
+        if(!isset($this->_config['api_key']) || $this->_config['api_key'] == '')
+        {
+            throw new \Exception('Api key not set!');
+        }
+        
+        if(!isset($this->_config['secret']) || $this->_config['secret'] == '')
+        {
+            throw new \Exception('Secret not set!');
+        }
+        
+        if(!isset($this->_config['shop']) || $this->_config['shop'] == '')
+        {
+            throw new \Exception('Shop not set!');
+        }
+        
+        return 'https://'. $this->_config['api_key'] .':'. $this->_config['secret'] .'@'. $this->_config['shop'];
+    }
+    
+    /**
+     * Set the config
+     * @param array $config
+     * @throws \InvalidArgumentException
+     * 
+     * @return \Shopify\Client
+     */
+    public function setConfig($config = array())
+    {
         if ($config instanceof \Zend\Config\Config) {
             $config = $config->toArray();
 

@@ -2,6 +2,8 @@
 
 namespace Shopify;
 
+use Zend\Http\Request;
+use Zend\Stdlib\Parameters;
 class Client
 {
     /**
@@ -44,7 +46,7 @@ class Client
     }
     
     /**
-     * Send a Request
+     * Send a GET Request
      * @param string $request
      * @throws \InvalidArgumentException
      * @todo Handle when the $response is not successful
@@ -77,6 +79,44 @@ class Client
         if ($response->isSuccess()) {
             return json_decode($response->getBody());
         }
+    }
+    
+    /**
+     * Modify an existing product
+     * @param integer $productId
+     */
+    public function put($productId = NULL, $data = array())
+    {
+    	// Sanity Checking
+    	if (is_null($productId))
+    	{
+    		throw new \InvalidArgumentException('Product Id must be specified');
+    	}
+    	
+    	if (empty($data))
+    	{
+    		throw new \InvalidArgumentException('Updated Data must be specified');
+    	}
+    	
+    	// Spit the domain name into an array so we can extract the user and pass
+    	$urlParts = parse_url($this->_getUrl());
+    	
+    	// Send the request
+    	$req = new \Zend\Http\Request();
+    	$req->setUri($this->_getUrl() . '/admin/products/' . $productId . '.json');
+    	$req->getHeaders()->addHeaders(array(
+    		'Content-Type' => 'application/x-www-form-urlencoded; charset=UTF-8'
+    	));
+    	$req->setMethod(Request::METHOD_PUT);
+    	$req->setPost(new Parameters($data));
+    	var_dump($req); exit;
+    	// Get the response
+    	$response = $this->_getClient()->dispatch($req);
+    	
+    	// If the response was successful
+    	if ($response->isSuccess()) {
+    		return json_decode($response->getBody());
+    	}
     }
     
     /**

@@ -34,16 +34,27 @@ class Client
 			throw new \InvalidArgumentException('String expected, got ' . gettype($request));
 		}
 		
-		$this->_getClient()->setUri($this->_getUrl() . $request);
+		$urlParts = parse_url($this->_getUrl());
 		
-		return json_decode($this->_getClient()->getResponse()->getBody());
+		$req = new Request();
+		$req->setUri($this->_getUrl() . $request);
+		$this->_client->setAuth($urlParts['user'], $urlParts['pass']);
+		
+		$response = $client->dispatch($req);
+		if ($response->isSuccess()) {
+			//  the POST was successful
+			return json_decode($response->getBody());
+		}
 	}
 	
 	private function _getClient()
 	{
 		if(!is_object($this->_client) || !$this->_client instanceof \Zend\Http\Client)
 		{
+			$adapter = new \Zend\Http\Client\Adapter\Curl();
+			
 			$this->_client = new \Zend\Http\Client();
+			$this->_client->setAdapter($adapter);
 		}
 		
 		return $this->_client;

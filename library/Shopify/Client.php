@@ -109,7 +109,6 @@ class Client
     	));
     	$req->setMethod(Request::METHOD_PUT);
     	$req->setPost(new Parameters($data));
-    	var_dump($req); exit;
     	// Get the response
     	$response = $this->_getClient()->dispatch($req);
     	

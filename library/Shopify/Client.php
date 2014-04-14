@@ -36,7 +36,7 @@ class Client
 		
 		$urlParts = parse_url($this->_getUrl());
 		
-		$req = new Request();
+		$req = new \Zend\Http\Request();
 		$req->setUri($this->_getUrl() . $request);
 		$this->_client->setAuth($urlParts['user'], $urlParts['pass']);
 		

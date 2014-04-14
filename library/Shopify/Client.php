@@ -38,7 +38,7 @@ class Client
 		
 		$req = new \Zend\Http\Request();
 		$req->setUri($this->_getUrl() . $request);
-		$this->_client->setAuth($urlParts['user'], $urlParts['pass']);
+		$this->_getClient()->setAuth($urlParts['user'], $urlParts['pass']);
 		
 		$response = $client->dispatch($req);
 		if ($response->isSuccess()) {

@@ -82,43 +82,6 @@ class Client
     }
     
     /**
-     * Modify an existing product
-     * @param integer $productId
-     */
-    public function editQuantity($variantId = NULL, $qty = 0)
-    {
-    	// Sanity Checking
-    	if (is_null($variantId))
-    	{
-    		throw new \InvalidArgumentException('Variant Id must be specified');
-    	}
-    	    	
-    	// Spit the domain name into an array so we can extract the user and pass
-    	$urlParts = parse_url($this->_getUrl());
-    	
-    	// Send the request
-    	$req = new \Zend\Http\Request();
-    	$req->setUri($this->_getUrl() . '/admin/variants/' . $variantId . '.json');
-    	$req->getHeaders()->addHeaders(array(
-    		'Content-Type' => 'application/x-www-form-urlencoded; charset=UTF-8'
-    	));
-    	$req->setMethod(Request::METHOD_PUT);
-    	$req->setPost(new Parameters(array(
-    		'variant' => array(
-    			'id' => $variantId,
-    			'inventory_quantity' => $qty
-    		)
-    	)));
-    	// Get the response
-    	$response = $this->_getClient()->dispatch($req);
-    	
-    	// If the response was successful
-    	if ($response->isSuccess()) {
-    		return json_decode($response->getBody());
-    	}
-    }
-    
-    /**
      * Get Client
      * If not set, the cUrl adapter is used to prevent issues with 
      * connecting to https

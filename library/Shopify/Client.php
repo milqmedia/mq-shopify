@@ -85,30 +85,30 @@ class Client
      * Modify an existing product
      * @param integer $productId
      */
-    public function put($productId = NULL, $data = array())
+    public function editQuantity($variantId = NULL, $qty = 0)
     {
     	// Sanity Checking
-    	if (is_null($productId))
+    	if (is_null($variantId))
     	{
-    		throw new \InvalidArgumentException('Product Id must be specified');
+    		throw new \InvalidArgumentException('Variant Id must be specified');
     	}
-    	
-    	if (empty($data))
-    	{
-    		throw new \InvalidArgumentException('Updated Data must be specified');
-    	}
-    	
+    	    	
     	// Spit the domain name into an array so we can extract the user and pass
     	$urlParts = parse_url($this->_getUrl());
     	
     	// Send the request
     	$req = new \Zend\Http\Request();
-    	$req->setUri($this->_getUrl() . '/admin/products/' . $productId . '.json');
+    	$req->setUri($this->_getUrl() . '/admin/variants/' . $variantId . '.json');
     	$req->getHeaders()->addHeaders(array(
     		'Content-Type' => 'application/x-www-form-urlencoded; charset=UTF-8'
     	));
     	$req->setMethod(Request::METHOD_PUT);
-    	$req->setPost(new Parameters($data));
+    	$req->setPost(new Parameters(array(
+    		'variant' => array(
+    			'id' => $variantId,
+    			'inventory_quantity' => $qty
+    		)
+    	)));
     	// Get the response
     	$response = $this->_getClient()->dispatch($req);
     	

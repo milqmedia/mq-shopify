@@ -85,6 +85,10 @@ class Product extends Resource
     	}
     	    	
     	// Send the request
+    	$client = new \Zend\Http\Client();
+    	$adapter = new \Zend\Http\Client\Adapter\Curl();
+        $client->setAdapter($adapter);
+    	
     	$req = new \Zend\Http\Request();
     	$req->setUri($this->_getUrl() . '/admin/products/' . $productVariantId . '/metafields.json');
     	$req->getHeaders()->addHeaders(array(
@@ -99,7 +103,7 @@ class Product extends Resource
     		)
     	)));
     	// Get the response
-    	$response = $this->_getClient()->dispatch($req);
+    	$response = $client->dispatch($req);
     	
     	// If the response was successful
     	if ($response->isSuccess()) {
@@ -127,6 +131,10 @@ class Product extends Resource
     	}
     	    	
     	// Send the request
+    	$client = new \Zend\Http\Client();
+    	$adapter = new \Zend\Http\Client\Adapter\Curl();
+    	$client->setAdapter($adapter);
+    	
     	$req = new \Zend\Http\Request();
     	$req->setUri($this->_getUrl() . '/admin/variants/' . $variantId . '.json');
     	$req->getHeaders()->addHeaders(array(
@@ -140,7 +148,7 @@ class Product extends Resource
     		)
     	)));
     	// Get the response
-    	$response = $this->_getClient()->dispatch($req);
+    	$response = $client->dispatch($req);
     	
     	// If the response was successful
     	if ($response->isSuccess()) {
@@ -170,6 +178,10 @@ class Product extends Resource
     	}
     	
     	// Send the request
+    	$client = new \Zend\Http\Client();
+    	$adapter = new \Zend\Http\Client\Adapter\Curl();
+    	$client->setAdapter($adapter);
+    	
     	$req = new \Zend\Http\Request();
     	$req->setUri($this->_getUrl() . '/admin/metafields/' . $metaFieldId . '.json');
     	$req->getHeaders()->addHeaders(array(
@@ -183,7 +195,7 @@ class Product extends Resource
     			)
     	)));
     	// Get the response
-    	$response = $this->_getClient()->dispatch($req);
+    	$response = $client->dispatch($req);
     	 
     	// If the response was successful
     	if ($response->isSuccess()) {

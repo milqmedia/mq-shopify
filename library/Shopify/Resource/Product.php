@@ -4,6 +4,7 @@ namespace Shopify\Resource;
 
 use Shopify\Resource;
 use Zend\Http\Request;
+use Zend\Stdlib\Parameters;
 
 class Product extends Resource
 {

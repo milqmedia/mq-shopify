@@ -3,6 +3,7 @@
 namespace Shopify\Resource;
 
 use Shopify\Resource;
+use Zend\Http\Request;
 
 class Product extends Resource
 {
@@ -62,6 +63,49 @@ class Product extends Resource
 		return $this->_getClient()->request("/admin/products/{$id}/metafields.json")->metafields;
 	}
 	
+	public function createNewMetaField($productVariantId = null, $metaFieldNamespace = NULL, $metaFieldName = NULL, $metaFieldValue = NULL)
+	{
+    	// Sanity Checking
+    	if (is_null($productVariantId))
+    	{
+    		throw new \InvalidArgumentException('Variant Id must be specified');
+    	}
+    	if (is_null($metaFieldNamespace))
+    	{
+    		throw new \InvalidArgumentException('Namespace must be specified');
+    	}
+    	if (is_null($metaFieldName))
+    	{
+    		throw new \InvalidArgumentException('Field Name must be specified');
+    	}
+    	if (is_null($metaFieldValue))
+    	{
+    		throw new \InvalidArgumentException('Field Value must be specified');
+    	}
+    	    	
+    	// Send the request
+    	$req = new \Zend\Http\Request();
+    	$req->setUri($this->_getUrl() . '/admin/products/' . $productVariantId . '/metafields.json');
+    	$req->getHeaders()->addHeaders(array(
+    		'Content-Type' => 'application/x-www-form-urlencoded; charset=UTF-8'
+    	));
+    	$req->setMethod(Request::METHOD_POST);
+    	$req->setPost(new Parameters(array(
+    		'metafield' => array(
+    			'namespace' => $metaFieldNamespace,
+    			'key' => $metaFieldName,
+    			'value' => $metaFieldValue
+    		)
+    	)));
+    	// Get the response
+    	$response = $this->_getClient()->dispatch($req);
+    	
+    	// If the response was successful
+    	if ($response->isSuccess()) {
+    		return json_decode($response->getBody());
+    	}
+    }
+	
 	public function getAllMetafields($options = null)
 	{
 		$response = $this->_getClient()->request('/admin/metafields.json');
@@ -81,9 +125,6 @@ class Product extends Resource
     		throw new \InvalidArgumentException('Variant Id must be specified');
     	}
     	    	
-    	// Spit the domain name into an array so we can extract the user and pass
-    	$urlParts = parse_url($this->_getUrl());
-    	
     	// Send the request
     	$req = new \Zend\Http\Request();
     	$req->setUri($this->_getUrl() . '/admin/variants/' . $variantId . '.json');
@@ -104,6 +145,50 @@ class Product extends Resource
     	if ($response->isSuccess()) {
     		return json_decode($response->getBody());
     	}
+    }
+    
+    public function updateMetaField($metaFieldId, $value)
+    {
+
+    	// Sanity Checking
+    	if (is_null($productVariantId))
+    	{
+    		throw new \InvalidArgumentException('Variant Id must be specified');
+    	}
+    	if (is_null($metaFieldNamespace))
+    	{
+    		throw new \InvalidArgumentException('Namespace must be specified');
+    	}
+    	if (is_null($metaFieldName))
+    	{
+    		throw new \InvalidArgumentException('Field Name must be specified');
+    	}
+    	if (is_null($metaFieldValue))
+    	{
+    		throw new \InvalidArgumentException('Field Value must be specified');
+    	}
+    	
+    	// Send the request
+    	$req = new \Zend\Http\Request();
+    	$req->setUri($this->_getUrl() . '/admin/metafields/' . $metaFieldId . '.json');
+    	$req->getHeaders()->addHeaders(array(
+    			'Content-Type' => 'application/x-www-form-urlencoded; charset=UTF-8'
+    	));
+    	$req->setMethod(Request::METHOD_PUT);
+    	$req->setPost(new Parameters(array(
+    			'metafield' => array(
+    					'id' => $metaFieldId,
+    					'value' => $value
+    			)
+    	)));
+    	// Get the response
+    	$response = $this->_getClient()->dispatch($req);
+    	 
+    	// If the response was successful
+    	if ($response->isSuccess()) {
+    		return json_decode($response->getBody());
+    	}
+    	
     }
 	
 	public function update($product = null)

@@ -16,7 +16,7 @@ class Client
      * The HTTP Client
      * @var \Zend\Http\Client
      */
-    private $_client = null;
+    private $_httpClient = null;
     
     /**
      * Configuration array
@@ -65,15 +65,15 @@ class Client
         }
         
         // Spit the domain name into an array so we can extract the user and pass
-        $urlParts = parse_url($this->_getUrl());
+        $urlParts = parse_url($this->getUrl());
         
         // Send the request 
         $req = new \Zend\Http\Request();
-        $req->setUri($this->_getUrl() . $request);
-        $this->_getClient()->setAuth($urlParts['user'], $urlParts['pass']);
+        $req->setUri($this->getUrl() . $request);
+        $this->_getHttpClient()->setAuth($urlParts['user'], $urlParts['pass']);
         
         // Get the response
-        $response = $this->_getClient()->dispatch($req);
+        $response = $this->_getHttpClient()->dispatch($req);
         
         // If the response was successful
         if ($response->isSuccess()) {
@@ -82,24 +82,24 @@ class Client
     }
     
     /**
-     * Get Client
+     * Get HTTP Client
      * If not set, the cUrl adapter is used to prevent issues with 
      * connecting to https
      * 
      * @return \Zend\Http\Client
      */
-    private function _getClient()
+    private function _getHttpClient()
     {
-        if(!is_object($this->_client) || !$this->_client instanceof \Zend\Http\Client)
+        if(!is_object($this->_httpClient) || !$this->_httpClient instanceof \Zend\Http\Client)
         {
         	// Set the adapter to cUrl
             $adapter = new \Zend\Http\Client\Adapter\Curl();
             
-            $this->_client = new \Zend\Http\Client();
-            $this->_client->setAdapter($adapter);
+            $this->_httpClient = new \Zend\Http\Client();
+            $this->_httpClient->setAdapter($adapter);
         }
         
-        return $this->_client;
+        return $this->_httpClient;
     }
     
     /**
@@ -107,7 +107,7 @@ class Client
      * @throws \Exception
      * @return string
      */
-    private function _getUrl()
+    public function getUrl()
     {
         if(!isset($this->_config['api_key']) || $this->_config['api_key'] == '')
         {

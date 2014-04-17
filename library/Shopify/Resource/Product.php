@@ -90,7 +90,7 @@ class Product extends Resource
         $client->setAdapter($adapter);
     	
     	$req = new \Zend\Http\Request();
-    	$req->setUri($this->_getUrl() . '/admin/products/' . $productVariantId . '/metafields.json');
+    	$req->setUri($this->_getClient()->getUrl() . '/admin/products/' . $productVariantId . '/metafields.json');
     	$req->getHeaders()->addHeaders(array(
     		'Content-Type' => 'application/x-www-form-urlencoded; charset=UTF-8'
     	));

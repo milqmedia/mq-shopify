@@ -83,12 +83,26 @@ class Product extends Resource
     	{
     		throw new \InvalidArgumentException('Field Value must be specified');
     	}
-    	    	
+
+    	return $this->_getClient()->request(
+			"/admin/products/{$productVariantId}/metafields.json", 
+			Request::METHOD_POST, 
+			array(
+				'metafield' => array(
+					'namespace' => $metaFieldNamespace,
+					'key' => $metaFieldName,
+					'value' => $metaFieldValue
+				)
+    		)
+    	);
     	// Send the request
+    	$urlParts = parse_url($this->_getClient()->getUrl());
+    	
     	$client = new \Zend\Http\Client();
     	$adapter = new \Zend\Http\Client\Adapter\Curl();
         $client->setAdapter($adapter);
-    	
+        $client->setAuth($urlParts['user'], $urlParts['pass']);
+        
     	$req = new \Zend\Http\Request();
     	$req->setUri($this->_getClient()->getUrl() . '/admin/products/' . $productVariantId . '/metafields.json');
     	$req->getHeaders()->addHeaders(array(

@@ -52,7 +52,7 @@ class Client
      * @todo Handle when the $response is not successful
      * @return string
      */
-    public function request($request = null)
+    public function request($request = null, $method = null, $data = null)
     {
     	// Sanity checking
         if(is_null($request))
@@ -70,6 +70,19 @@ class Client
         // Send the request 
         $req = new \Zend\Http\Request();
         $req->setUri($this->getUrl() . $request);
+        if (!is_null($method))
+        {
+        	$req->setMethod($method);
+        }
+        else 
+        {
+        	$req->setMethod(Request::METHOD_GET);
+        }
+        if (!is_null($data))
+        {
+        	$req->setPost(new Parameters($data));
+        }
+        
         $this->_getHttpClient()->setAuth($urlParts['user'], $urlParts['pass']);
         
         // Get the response

@@ -32,6 +32,11 @@ abstract class Resource
         return $this;
     }
     
+    /**
+     * Get Client
+     * @throws \Exception
+     * @return \Shopify\Client
+     */
     protected function _getClient()
     {
     	if(!$this->_config['client'] instanceof Client)

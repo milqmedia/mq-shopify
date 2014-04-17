@@ -54,7 +54,7 @@ class Product extends Resource
 		return $this->_getClient()->request('/admin/products/count.json')->count;
 	}
 	
-	public function getMetafields($id = null)
+	public function getProductMetafields($id = null)
 	{
 		if(!is_int($id))
 		{
@@ -62,6 +62,16 @@ class Product extends Resource
 		}
 		
 		return $this->_getClient()->request("/admin/products/{$id}/metafields.json")->metafields;
+	}
+	
+	public function getProductVariantMetafields($id = null)
+	{
+		if(!is_int($id))
+		{
+			throw new \InvalidArgumentException('Integer expected, got '. gettype($id));
+		}
+		
+		return $this->_getClient()->request("/admin/variants/{$id}/metafields.json")->metafields;
 	}
 	
 	public function createNewMetaField($productVariantId = null, $metaFieldNamespace = NULL, $metaFieldName = NULL, $metaFieldValue = NULL)
@@ -85,7 +95,7 @@ class Product extends Resource
     	}
 
     	return $this->_getClient()->request(
-			"/admin/products/{$productVariantId}/metafields.json", 
+			"/admin/variants/{$productVariantId}/metafields.json", 
 			Request::METHOD_POST, 
 			array(
 				'metafield' => array(

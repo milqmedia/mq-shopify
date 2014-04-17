@@ -106,34 +106,6 @@ class Product extends Resource
 				)
     		)
     	);
-    	// Send the request
-    	$urlParts = parse_url($this->_getClient()->getUrl());
-    	
-    	$client = new \Zend\Http\Client();
-    	$adapter = new \Zend\Http\Client\Adapter\Curl();
-        $client->setAdapter($adapter);
-        $client->setAuth($urlParts['user'], $urlParts['pass']);
-        
-    	$req = new \Zend\Http\Request();
-    	$req->setUri($this->_getClient()->getUrl() . '/admin/products/' . $productVariantId . '/metafields.json');
-    	$req->getHeaders()->addHeaders(array(
-    		'Content-Type' => 'application/x-www-form-urlencoded; charset=UTF-8'
-    	));
-    	$req->setMethod(Request::METHOD_POST);
-    	$req->setPost(new Parameters(array(
-    		'metafield' => array(
-    			'namespace' => $metaFieldNamespace,
-    			'key' => $metaFieldName,
-    			'value' => $metaFieldValue
-    		)
-    	)));
-    	// Get the response
-    	$response = $client->dispatch($req);
-    	
-    	// If the response was successful
-    	if ($response->isSuccess()) {
-    		return json_decode($response->getBody());
-    	}
     }
 	
 	public function getAllMetafields($options = null)
@@ -147,7 +119,7 @@ class Product extends Resource
      * Modify an existing product
      * @param integer $productId
      */
-    public function editStockQuantity($variantId = NULL, $qty = 0)
+    public function editStockQuantity($productVariantId = NULL, $qty = 0)
     {
     	// Sanity Checking
     	if (is_null($variantId))
@@ -155,30 +127,17 @@ class Product extends Resource
     		throw new \InvalidArgumentException('Variant Id must be specified');
     	}
     	    	
-    	// Send the request
-    	$client = new \Zend\Http\Client();
-    	$adapter = new \Zend\Http\Client\Adapter\Curl();
-    	$client->setAdapter($adapter);
+    	return $this->_getClient()->request(
+    			"/admin/variants/{$productVariantId}.json",
+    			Request::METHOD_PUT,
+    			array(
+    				'variant' => array(
+		    			'id' => $variantId,
+		    			'inventory_quantity' => $qty
+		    		)
+    			)
+    	);
     	
-    	$req = new \Zend\Http\Request();
-    	$req->setUri($this->_getUrl() . '/admin/variants/' . $variantId . '.json');
-    	$req->getHeaders()->addHeaders(array(
-    		'Content-Type' => 'application/x-www-form-urlencoded; charset=UTF-8'
-    	));
-    	$req->setMethod(Request::METHOD_PUT);
-    	$req->setPost(new Parameters(array(
-    		'variant' => array(
-    			'id' => $variantId,
-    			'inventory_quantity' => $qty
-    		)
-    	)));
-    	// Get the response
-    	$response = $client->dispatch($req);
-    	
-    	// If the response was successful
-    	if ($response->isSuccess()) {
-    		return json_decode($response->getBody());
-    	}
     }
     
     public function updateMetaField($metaFieldId, $value)
@@ -204,32 +163,6 @@ class Product extends Resource
     				)
     			)
     	);
-    	
-    	// Send the request
-    	$client = new \Zend\Http\Client();
-    	$adapter = new \Zend\Http\Client\Adapter\Curl();
-    	$client->setAdapter($adapter);
-    	
-    	$req = new \Zend\Http\Request();
-    	$req->setUri($this->_getUrl() . '/admin/metafields/' . $metaFieldId . '.json');
-    	$req->getHeaders()->addHeaders(array(
-    			'Content-Type' => 'application/x-www-form-urlencoded; charset=UTF-8'
-    	));
-    	$req->setMethod(Request::METHOD_PUT);
-    	$req->setPost(new Parameters(array(
-    			'metafield' => array(
-    					'id' => $metaFieldId,
-    					'value' => $value
-    			)
-    	)));
-    	// Get the response
-    	$response = $client->dispatch($req);
-    	 
-    	// If the response was successful
-    	if ($response->isSuccess()) {
-    		return json_decode($response->getBody());
-    	}
-    	
     }
 	
 	public function update($product = null)

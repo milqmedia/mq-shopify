@@ -185,22 +185,25 @@ class Product extends Resource
     {
 
     	// Sanity Checking
-    	if (is_null($productVariantId))
+    	if (!is_int($metaFieldId))
     	{
-    		throw new \InvalidArgumentException('Variant Id must be specified');
+    		throw new \InvalidArgumentException('Integer expected, got '. gettype($metaFieldId));
     	}
-    	if (is_null($metaFieldNamespace))
+    	if (!is_string($value))
     	{
-    		throw new \InvalidArgumentException('Namespace must be specified');
+    		throw new \InvalidArgumentException('Integer expected, got '. gettype($value));
     	}
-    	if (is_null($metaFieldName))
-    	{
-    		throw new \InvalidArgumentException('Field Name must be specified');
-    	}
-    	if (is_null($metaFieldValue))
-    	{
-    		throw new \InvalidArgumentException('Field Value must be specified');
-    	}
+    	
+    	return $this->_getClient()->request(
+    			"/admin/metafields/{$metaFieldId}.json",
+    			Request::METHOD_PUT,
+    			array(
+    				'metafield' => array(
+    					'id' => $metaFieldId,
+    					'value' => $value
+    				)
+    			)
+    	);
     	
     	// Send the request
     	$client = new \Zend\Http\Client();

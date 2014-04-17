@@ -101,7 +101,8 @@ class Product extends Resource
 				'metafield' => array(
 					'namespace' => $metaFieldNamespace,
 					'key' => $metaFieldName,
-					'value' => $metaFieldValue
+					'value' => $metaFieldValue,
+					'value_type' => (is_int($metaFieldValue) ? 'integer' : 'string')
 				)
     		)
     	);

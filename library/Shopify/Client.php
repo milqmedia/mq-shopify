@@ -70,6 +70,9 @@ class Client
         // Send the request 
         $req = new \Zend\Http\Request();
         $req->setUri($this->getUrl() . $request);
+        $req->getHeaders()->addHeaders(array(
+        	'Content-Type' => 'application/x-www-form-urlencoded; charset=UTF-8'
+        ));
         if (!is_null($method))
         {
         	$req->setMethod($method);

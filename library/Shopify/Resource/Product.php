@@ -122,7 +122,7 @@ class Product extends Resource
     public function editStockQuantity($productVariantId = NULL, $qty = 0)
     {
     	// Sanity Checking
-    	if (is_null($variantId))
+    	if (is_null($productVariantId))
     	{
     		throw new \InvalidArgumentException('Variant Id must be specified');
     	}

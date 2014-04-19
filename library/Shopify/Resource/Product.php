@@ -4,7 +4,6 @@ namespace Shopify\Resource;
 
 use Shopify\Resource;
 use Zend\Http\Request;
-use Zend\Stdlib\Parameters;
 
 class Product extends Resource
 {
@@ -74,7 +73,7 @@ class Product extends Resource
 		return $this->_getClient()->request("/admin/variants/{$id}/metafields.json")->metafields;
 	}
 	
-	public function createNewMetaField($productVariantId = null, $metaFieldNamespace = NULL, $metaFieldName = NULL, $metaFieldValue = NULL)
+	public function createNewMetaFieldForProductVariant($productVariantId = null, $metaFieldNamespace = NULL, $metaFieldName = NULL, $metaFieldValue = NULL)
 	{
     	// Sanity Checking
     	if (is_null($productVariantId))
@@ -108,6 +107,40 @@ class Product extends Resource
     	);
     }
 	
+	public function createNewMetaFieldForProduct($productId = null, $metaFieldNamespace = NULL, $metaFieldName = NULL, $metaFieldValue = NULL)
+	{
+    	// Sanity Checking
+    	if (is_null($productVariantId))
+    	{
+    		throw new \InvalidArgumentException('Variant Id must be specified');
+    	}
+    	if (is_null($metaFieldNamespace))
+    	{
+    		throw new \InvalidArgumentException('Namespace must be specified');
+    	}
+    	if (is_null($metaFieldName))
+    	{
+    		throw new \InvalidArgumentException('Field Name must be specified');
+    	}
+    	if (is_null($metaFieldValue))
+    	{
+    		throw new \InvalidArgumentException('Field Value must be specified');
+    	}
+
+    	return $this->_getClient()->request(
+			"/admin/products/{$productId}/metafields.json", 
+			Request::METHOD_POST, 
+			array(
+				'metafield' => array(
+					'namespace' => $metaFieldNamespace,
+					'key' => $metaFieldName,
+					'value' => $metaFieldValue,
+					'value_type' => (is_int($metaFieldValue) ? 'integer' : 'string')
+				)
+    		)
+    	);
+    }
+	
 	public function getAllMetafields($options = null)
 	{
 		$response = $this->_getClient()->request('/admin/metafields.json');
@@ -116,8 +149,9 @@ class Product extends Resource
 	}
     
     /**
-     * Modify an existing product
+     * Edit Stock Quantity
      * @param integer $productId
+     * @param integer $qty
      */
     public function editStockQuantity($productVariantId = NULL, $qty = 0)
     {
@@ -140,9 +174,15 @@ class Product extends Resource
     	
     }
     
+    /**
+     * Update Meta Field value of existing Meta Field
+     * @param integer $metaFieldId
+     * @param string|integer $value
+     * @throws \InvalidArgumentException
+     * @return Ambigous <string, mixed>
+     */
     public function updateMetaField($metaFieldId, $value)
     {
-
     	// Sanity Checking
     	if (!is_int($metaFieldId))
     	{

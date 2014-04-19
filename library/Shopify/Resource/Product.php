@@ -110,7 +110,7 @@ class Product extends Resource
 	public function createNewMetaFieldForProduct($productId = null, $metaFieldNamespace = NULL, $metaFieldName = NULL, $metaFieldValue = NULL)
 	{
     	// Sanity Checking
-    	if (is_null($productVariantId))
+    	if (is_null($productId))
     	{
     		throw new \InvalidArgumentException('Variant Id must be specified');
     	}

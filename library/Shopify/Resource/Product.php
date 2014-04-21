@@ -166,7 +166,7 @@ class Product extends Resource
     			Request::METHOD_PUT,
     			array(
     				'variant' => array(
-		    			'id' => $variantId,
+		    			'id' => $productVariantId,
 		    			'inventory_quantity' => $qty
 		    		)
     			)

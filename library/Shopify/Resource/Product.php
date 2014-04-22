@@ -174,6 +174,31 @@ class Product extends Resource
     	
     }
     
+    public function editVariantPrice($productVariantId = NULL, $variantPrice = 0)
+    {
+    	// Sanity Checking
+    	if (is_null($productVariantId))
+    	{
+    		throw new \InvalidArgumentException('Variant Id must be specified');
+    	}
+    	
+    	if (!$variantPrice)
+    	{
+    		throw new \InvalidArgumentException('Price must be greater than zero');
+    	}
+    	
+    	return $this->_getClient()->request(
+    			"/admin/variants/{$productVariantId}.json",
+    			Request::METHOD_PUT,
+    			array(
+    				'variant' => array(
+		    			'id' => $productVariantId,
+		    			'price' => $variantPrice
+		    		)
+    			)
+    	);
+    }
+    
     /**
      * Update Meta Field value of existing Meta Field
      * @param integer $metaFieldId

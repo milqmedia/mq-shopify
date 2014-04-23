@@ -174,6 +174,31 @@ class Product extends Resource
     	
     }
     
+    public function editVariantWasPrice($productVariantId = NULL, $variantWasPrice = 0)
+    {
+    	// Sanity Checking
+    	if (is_null($productVariantId))
+    	{
+    		throw new \InvalidArgumentException('Variant Id must be specified');
+    	}
+    	
+    	if (!$variantWasPrice)
+    	{
+    		throw new \InvalidArgumentException('Was Price must be greater than zero');
+    	}
+    	
+    	return $this->_getClient()->request(
+    			"/admin/variants/{$productVariantId}.json",
+    			Request::METHOD_PUT,
+    			array(
+    				'variant' => array(
+		    			'id' => $productVariantId,
+		    			'compare_at_price' => $variantWasPrice
+		    		)
+    			)
+    	);
+    }
+    
     public function editVariantPrice($productVariantId = NULL, $variantPrice = 0)
     {
     	// Sanity Checking

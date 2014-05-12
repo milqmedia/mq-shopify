@@ -47,7 +47,7 @@ class Product extends Resource
 			{
 				$pageNumber = (($i/self::MAX_RESULTS)+1);
 			}
-			$products = array_merge($products, $this->_getClient()->request($url . '&page_number=' . $pageNumber)->products);
+			$products = array_merge($products, $this->_getClient()->request($url . '&page=' . $pageNumber)->products);
 		}
 		
 		return $products;

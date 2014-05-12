@@ -42,7 +42,12 @@ class Product extends Resource
 		
 		for($i=0; $i <= $this->getAllCount(); $i += self::MAX_RESULTS)
 		{
-			$products = array_merge($products, $this->_getClient()->request($url)->products);
+			$pageNumber = 1;
+			if ($i > 0)
+			{
+				$pageNumber = (($i/self::MAX_RESULTS)+1);
+			}
+			$products = array_merge($products, $this->_getClient()->request($url . '&page_number=' . $pageNumber)->products);
 		}
 		
 		return $products;

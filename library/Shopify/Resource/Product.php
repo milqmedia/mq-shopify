@@ -166,17 +166,12 @@ class Product extends Resource
     		throw new \InvalidArgumentException('Variant Id must be specified');
     	}
     	    	
-    	return $this->_getClient()->request(
-    			"/admin/variants/{$productVariantId}.json",
-    			Request::METHOD_PUT,
-    			array(
-    				'variant' => array(
-		    			'id' => $productVariantId,
-		    			'inventory_quantity' => $qty
-		    		)
-    			)
-    	);
-    	
+    	return $this->updateProductVariant($productVariantId, array(
+    		'variant' => array(
+		    	'id' => $productVariantId,
+		    	'inventory_quantity' => $qty
+		    )
+    	));
     }
     
     public function editVariantWasPrice($productVariantId = NULL, $variantWasPrice = 0)
@@ -192,16 +187,12 @@ class Product extends Resource
     		throw new \InvalidArgumentException('Was Price must be greater than zero');
     	}
     	
-    	return $this->_getClient()->request(
-    			"/admin/variants/{$productVariantId}.json",
-    			Request::METHOD_PUT,
-    			array(
-    				'variant' => array(
-		    			'id' => $productVariantId,
-		    			'compare_at_price' => $variantWasPrice
-		    		)
-    			)
-    	);
+    	return $this->updateProductVariant($productVariantId, array(
+    		'variant' => array(
+		    	'id' => $productVariantId,
+		    	'compare_at_price' => $variantWasPrice
+		    )
+    	));
     }
     
     public function editVariantPrice($productVariantId = NULL, $variantPrice = 0)
@@ -217,16 +208,12 @@ class Product extends Resource
     		throw new \InvalidArgumentException('Price must be greater than zero');
     	}
     	
-    	return $this->_getClient()->request(
-    			"/admin/variants/{$productVariantId}.json",
-    			Request::METHOD_PUT,
-    			array(
-    				'variant' => array(
-		    			'id' => $productVariantId,
-		    			'price' => $variantPrice
-		    		)
-    			)
-    	);
+    	return $this->updateProductVariant($productVariantId, array(
+    		'variant' => array(
+		    	'id' => $productVariantId,
+		    	'price' => $variantPrice
+		    )
+    	));
     }
     
     /**
@@ -257,6 +244,21 @@ class Product extends Resource
     					'value' => $value
     				)
     			)
+    	);
+    }
+    
+    /**
+     * Core method to update the product variant
+     * @param integer $productVariantId
+     * @param array $data
+     * @return Ambigous <string, mixed>
+     */
+    public function updateProductVariant($productVariantId, $data)
+    {
+    	return $this->_getClient()->request(
+    			"/admin/variants/{$productVariantId}.json",
+    			Request::METHOD_PUT,
+    			$data
     	);
     }
 	

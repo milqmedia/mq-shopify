@@ -261,6 +261,20 @@ class Product extends Resource
     			$data
     	);
     }
+    
+    /**
+     * Core method to update the product  
+     * @param integer $productId
+     * @param array $data
+     */
+    public function updateProduct($productId, $data)
+    {
+    	return $this->_getClient()->request(
+    			"/admin/products/{$productId}.json",
+    			Request::METHOD_PUT,
+    			$data
+    	);
+    }
 	
 	public function update($product = null)
 	{

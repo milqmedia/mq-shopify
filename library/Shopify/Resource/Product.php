@@ -174,15 +174,21 @@ class Product extends Resource
     	));
     }
     
-    public function editVariantWasPrice($productVariantId = NULL, $variantWasPrice = 0)
+    /**
+     * Edit Compare At Price
+     * @param integer $productVariantId
+     * @param number|NULL $variantWasPrice
+     * @throws \InvalidArgumentException
+     * @return Ambigous <\Shopify\Resource\Ambigous, string, mixed>
+     */
+    public function editVariantWasPrice($productVariantId = NULL, $variantWasPrice = NULL)
     {
     	// Sanity Checking
     	if (is_null($productVariantId))
     	{
     		throw new \InvalidArgumentException('Variant Id must be specified');
     	}
-    	
-    	if (!$variantWasPrice)
+    	if ($variantWasPrice == 0)
     	{
     		throw new \InvalidArgumentException('Was Price must be greater than zero');
     	}

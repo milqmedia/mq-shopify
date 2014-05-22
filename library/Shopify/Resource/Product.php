@@ -188,7 +188,7 @@ class Product extends Resource
     	{
     		throw new \InvalidArgumentException('Variant Id must be specified');
     	}
-    	if ($variantWasPrice == 0)
+    	if (!is_null($variantWasPrice) && $variantWasPrice == 0)
     	{
     		throw new \InvalidArgumentException('Was Price must be greater than zero');
     	}

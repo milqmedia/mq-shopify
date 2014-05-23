@@ -196,7 +196,7 @@ class Product extends Resource
     	return $this->updateProductVariant($productVariantId, array(
     		'variant' => array(
 		    	'id' => $productVariantId,
-		    	'compare_at_price' => (is_null($variantWasPrice) ? 'null' : $variantWasPrice)
+		    	'compare_at_price' => $variantWasPrice
 		    )
     	));
     }

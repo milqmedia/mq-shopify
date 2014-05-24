@@ -91,9 +91,25 @@ class Client
         // Get the response
         $response = $this->_getHttpClient()->dispatch($req);
         
+        // Check the Rate Limit
+        // If we're hitting 3/4 of the allowed limit sleep 1 sec
+        // @link http://docs.shopify.com/api/tutorials/learning-to-respect-the-api-call-limit
+        $headers = $response->getHeaders();
+        $rawLimit = $headers->get('HTTP_X_SHOPIFY_SHOP_API_CALL_LIMIT')->getFieldValue();
+        list ($currentRate, $currentLimit) = split('/');
+        if ($currentRate > ($currentLimit - ($currentLimit/0.25)))
+        {
+        	sleep(1);
+        }
+        
         // If the response was successful
         if ($response->isSuccess()) {
             return json_decode($response->getBody());
+        }
+        else 
+        // Try again 
+        {
+        	$this->request($request,$method,$data);
         }
     }
     

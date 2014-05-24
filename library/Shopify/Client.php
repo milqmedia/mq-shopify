@@ -96,7 +96,7 @@ class Client
         // @link http://docs.shopify.com/api/tutorials/learning-to-respect-the-api-call-limit
         $headers = $response->getHeaders();
         $rawLimit = $headers->get('HTTP_X_SHOPIFY_SHOP_API_CALL_LIMIT')->getFieldValue();
-        list ($currentRate, $currentLimit) = split('/');
+        list ($currentRate, $currentLimit) = explode('/', $rawLimit);
         if ($currentRate > ($currentLimit - ($currentLimit/0.25)))
         {
         	sleep(1);

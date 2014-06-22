@@ -289,7 +289,7 @@ class Product extends Resource
     public function createProduct($data)
     {
     	return $this->_getClient()->request(
-    		'admin/products.json',
+    		'/admin/products.json',
     		Request::METHOD_POST,
     		$data
     	);

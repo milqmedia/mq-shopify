@@ -281,6 +281,19 @@ class Product extends Resource
     			$data
     	);
     }
+    
+    /**
+     * Create a new product
+     * @param array $data
+     */
+    public function createProduct($data)
+    {
+    	return $this->_getClient()->request(
+    		'admin/products.json',
+    		Request::METHOD_POST,
+    		$data
+    	);
+    }
 	
 	public function update($product = null)
 	{

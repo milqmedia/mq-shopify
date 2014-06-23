@@ -285,11 +285,42 @@ class Product extends Resource
     /**
      * Create a new product
      * @param array $data
+     * @link http://docs.shopify.com/api/product#create
      */
     public function createProduct($data)
     {
     	return $this->_getClient()->request(
     		'/admin/products.json',
+    		Request::METHOD_POST,
+    		$data
+    	);
+    }
+    
+    /**
+     * Create a new Product Variant
+     * @param integer $productId
+     * @param array $data
+     * @link http://docs.shopify.com/api/product_variant#create
+     */
+    public function createProductVariant($productId, $data)
+    {
+    	return $this->_getClient()->request(
+    		'/admin/products/'. $productId .'/variants.json',
+    		Request::METHOD_POST,
+    		$data
+    	);
+    }
+    
+    /**
+     * Add an image to a product
+     * @param integer $productId
+     * @param array $data
+     * @link http://docs.shopify.com/api/product_image#create
+     */
+    public function addImageToProduct($productId, $data)
+    {
+    	return $this->_getClient()->request(
+    		'/admin/products/'. $productId .'/images.json',
     		Request::METHOD_POST,
     		$data
     	);

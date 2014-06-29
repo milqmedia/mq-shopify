@@ -316,10 +316,16 @@ class Product extends Resource
      * @param integer $productId
      * @link http://docs.shopify.com/api/product_variant#show
      */
-    public function getProductVariants($productId)
+    public function getProductVariants($productId, $options = NULL)
     {
+    	$url = '/admin/products/'. $productId .'/variants.json?limit='. self::MAX_RESULTS;
+    	if(is_array($options))
+    	{
+    		$url .= '&'. $this->_flattenOptions($options);
+    	}
+    	
     	return $this->_getClient()->request(
-    		'/admin/products/'. $productId .'/variants.json',
+    		$url,
     		Request::METHOD_GET
     	);
     }

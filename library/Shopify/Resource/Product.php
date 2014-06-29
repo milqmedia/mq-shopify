@@ -312,6 +312,19 @@ class Product extends Resource
     }
     
     /**
+     * Get All Product Variants
+     * @param integer $productId
+     * @link http://docs.shopify.com/api/product_variant#show
+     */
+    public function getProductVariants($productId)
+    {
+    	return $this->_getClient()->request(
+    		'/admin/products/'. $productId .'/variants.json',
+    		Request::METHOD_GET
+    	);
+    }
+    
+    /**
      * Add an image to a product
      * @param integer $productId
      * @param array $data

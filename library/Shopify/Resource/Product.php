@@ -344,15 +344,12 @@ class Product extends Resource
     		$data
     	);
     }
-	
-	public function update($product = null)
-	{
-		if(!is_object($product))
-		{
-			throw new \InvalidArgumentException('Object expected, got '. gettype($id));
-		}
-		
-		throw new \Exception('Not implemented yet.');
-		return $product;
-	}
+    
+    public function deleteProductVariant($productId, $variantId)
+    {
+    	return $this->_getClient()->request(
+    		'/admin/products/'. $productId .'/variants/'. $variantId .'.json',
+    		Request::METHOD_DELETE
+    	);
+    }
 }

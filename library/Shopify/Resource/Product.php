@@ -345,6 +345,13 @@ class Product extends Resource
     	);
     }
     
+    /**
+     * Delete a product variant
+     * Note: You must not delete the only remaining variant
+     * @param integer $productId
+     * @param integer $variantId
+     * @link http://docs.shopify.com/api/product_variant#destroy
+     */
     public function deleteProductVariant($productId, $variantId)
     {
     	return $this->_getClient()->request(

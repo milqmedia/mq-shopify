@@ -2,6 +2,7 @@
 namespace Shopify\Resource;
 
 use Shopify\Resource;
+use Zend\Http\Request;
 class Order extends Resource
 {
 	public function __construct($options)

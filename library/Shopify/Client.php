@@ -87,7 +87,6 @@ class Client
         }
         
         $this->_getHttpClient()->setAuth($urlParts['user'], $urlParts['pass']);
-        
         // Get the response
         $response = $this->_getHttpClient()->dispatch($req);
         
@@ -95,11 +94,14 @@ class Client
         // If we're hitting 3/4 of the allowed limit sleep 1 sec
         // @link http://docs.shopify.com/api/tutorials/learning-to-respect-the-api-call-limit
         $headers = $response->getHeaders();
-        $rawLimit = $headers->get('HTTP_X_SHOPIFY_SHOP_API_CALL_LIMIT')->getFieldValue();
-        list ($currentRate, $currentLimit) = explode('/', $rawLimit);
-        if ($currentRate > ($currentLimit - ($currentLimit/0.25)))
+        if ($headers instanceof \Zend\Http\Headers)
         {
-        	sleep(1);
+	        $rawLimit = $headers->get('HTTP_X_SHOPIFY_SHOP_API_CALL_LIMIT')->getFieldValue();
+	        list ($currentRate, $currentLimit) = explode('/', $rawLimit);
+	        if ($currentRate > ($currentLimit - ($currentLimit*0.25)))
+	        {
+	        	sleep(1);
+	        }
         }
         
         // If the response was successful
@@ -107,9 +109,9 @@ class Client
             return json_decode($response->getBody());
         }
         else 
-        // Try again 
+        // Die
         {
-        	$this->request($request,$method,$data);
+        	throw new \Exception('Response returned status: (' . $response->getStatusCode() . ') ' . $response->getReasonPhrase());
         }
     }
     

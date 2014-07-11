@@ -10,6 +10,21 @@ class Order extends Resource
 	}
 	
 	/**
+	 * Recieve a single order
+	 * @see \Shopify\Resource::get()
+	 */
+	public function get($id = null)
+	{
+		if(!is_int($id))
+		{
+			throw new \InvalidArgumentException('Integer expected, got '. gettype($id));
+		}
+			
+		return $this->_getClient()->request('/admin/orders/{$id}.json');
+	}
+	
+	
+	/**
 	 * Fulfil Whole Orders
 	 * Note: this does not take a parameter for fulfiilling part of an order
 	 * @param integer $orderId

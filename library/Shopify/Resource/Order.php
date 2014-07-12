@@ -33,7 +33,7 @@ class Order extends Resource
 	 * @param string $trackingUrl
 	 * @link http://docs.shopify.com/api/fulfillment#create
 	 */
-	public function fulfillWholeOrder($orderId, $trackingCompany = NULL, $trackingUrl = NULL)
+	public function fulfillWholeOrder($orderId, $trackingCompany = NULL, $trackingNumber = NULL, $trackingUrl = NULL)
 	{
 		return $this->_getClient()->request(
 				"/admin/orders/{$orderId}/fulfillments.json",
@@ -41,6 +41,7 @@ class Order extends Resource
 				array(
 					'fulfillment' => array(
 						'tracking_company' => $trackingCompany,
+						'tracking_number' => $trackingNumber,
 						'tracking_url' => $trackingUrl
 					)
 				)

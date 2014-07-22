@@ -26,7 +26,7 @@ class Product extends Resource
 			throw new \InvalidArgumentException('Integer expected, got '. gettype($id));
 		}
 			
-		return $this->_getClient()->request('/admin/products/{$id}.json');
+		return $this->_getClient()->request("/admin/products/{$id}.json");
 	}
 	
 	public function getAll($options = null)

@@ -83,8 +83,7 @@ class Client
         }
         if (!is_null($data))
         {
-        	$data = new Parameters($data);
-        	$req->setPost($data->toArray());
+        	$req->setPost(new Parameters($data));
         }
         
         $this->_getHttpClient()->setAuth($urlParts['user'], $urlParts['pass']);

@@ -21,7 +21,7 @@ class Order extends Resource
 			throw new \InvalidArgumentException('Integer expected, got '. gettype($id));
 		}
 			
-		return $this->_getClient()->request('/admin/orders/{$id}.json');
+		return $this->_getClient()->request("/admin/orders/{$id}.json");
 	}
 	
 	
@@ -44,6 +44,22 @@ class Order extends Resource
 						'tracking_number' => $trackingNumber,
 						'tracking_url' => $trackingUrl
 					)
+				)
+		);
+	}
+	
+	public function fulfillPartOrder($orderId, $orderLineIds,  $trackingCompany = NULL, $trackingNumber = NULL, $trackingUrl = NULL)
+	{
+		return $this->_getClient()->request(
+				"/admin/orders/{$orderId}/fulfillments.json",
+				Request::METHOD_POST,
+				array(
+						'fulfillment' => array(
+								'tracking_company' => $trackingCompany,
+								'tracking_number' => $trackingNumber,
+								'tracking_url' => $trackingUrl,
+								'line_items' => $orderLineIds
+						)
 				)
 		);
 	}

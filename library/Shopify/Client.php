@@ -111,7 +111,7 @@ class Client
         else 
         // Die
         {
-        	throw new \Exception('Response returned status: (' . $response->getStatusCode() . ') ' . $response->getReasonPhrase());
+        	throw new \Exception('Response returned status: (' . $response->getStatusCode() . ') ' . $response->getReasonPhrase() .' BODY: '. $response->getBody());
         }
     }
     

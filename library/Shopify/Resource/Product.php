@@ -238,7 +238,7 @@ class Product extends Resource
     	}
     	if (!is_string($value))
     	{
-    		throw new \InvalidArgumentException('Integer expected, got '. gettype($value));
+    		throw new \InvalidArgumentException('String expected, got '. gettype($value));
     	}
     	
     	return $this->_getClient()->request(

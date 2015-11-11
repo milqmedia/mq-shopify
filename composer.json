@@ -1,0 +1,23 @@
+{
+    "name": "milqmedia/mq-shopify",
+    "type": "library",
+    "description": "Milq Media Shopify API wrapper",
+    "keywords": [
+        "zf2",
+        "shopify",
+        "milq media"
+    ],
+    "homepage": "https://github.com/milqmedia/mq-shopify",
+    "require": {
+        "php": ">=5.5",
+        "zendframework/zendframework": "2.*"
+    },
+    "autoload": {
+	    "psr-0": {
+	        "MQShopify": "src/"
+        },
+        "classmap": [
+            "./"
+        ]
+    }
+}

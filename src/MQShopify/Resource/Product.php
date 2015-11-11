@@ -1,8 +1,8 @@
 <?php
 
-namespace Shopify\Resource;
+namespace MQShopify\Resource;
 
-use Shopify\Resource;
+use MQShopify\Resource;
 use Zend\Http\Request;
 
 class Product extends Resource

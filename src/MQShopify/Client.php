@@ -1,16 +1,17 @@
 <?php 
 
-namespace Shopify;
+namespace MQShopify;
 
 use Zend\Http\Request;
 use Zend\Stdlib\Parameters;
+
 class Client
 {
     /**
      * USER_AGENT
      * @var string
      */
-    const USER_AGENT = 'PHP Shopify API v0.0.1';
+    const USER_AGENT = 'MQShopify API v0.0.1';
     
     /**
      * The HTTP Client

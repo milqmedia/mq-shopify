@@ -1,8 +1,9 @@
 <?php
-namespace Shopify\Resource;
+namespace MQShopify\Resource;
 
-use Shopify\Resource;
+use MQShopify\Resource;
 use Zend\Http\Request;
+
 class Order extends Resource
 {
 	public function __construct($options)

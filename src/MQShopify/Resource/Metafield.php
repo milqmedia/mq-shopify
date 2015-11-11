@@ -1,7 +1,8 @@
 <?php
-namespace Shopify\Resource;
+namespace MQShopify\Resource;
 
-use Shopify\Resource;
+use MQShopify\Resource;
+
 class Metafield extends Resource
 {
 	const MAX_RESULTS = 250;

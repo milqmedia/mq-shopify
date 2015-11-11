@@ -1,6 +1,6 @@
 <?php
 
-namespace Shopify;
+namespace MQShopify;
 
 abstract class Resource
 {
